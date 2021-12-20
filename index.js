@@ -16,11 +16,15 @@ async function fetchMeals(search) {
 }
 
 function mealsDisplay() {
-    // Je ne veux afficher que 12 plats max
-    meals.length = 12;
-    
-    result.innerHTML = meals.map(
-        (meal) => 
+    if (meals === null) {
+        result.innerHTML = "<h2>Aucun résulat</h2>";
+    } else {
+      // Je ne veux afficher que 12 plats max
+      meals.length = 12;
+
+      result.innerHTML = meals
+        .map(
+          (meal) =>
             `
             <li class="card">
                 <h2>${meal.strMeal}</h2>
@@ -29,8 +33,9 @@ function mealsDisplay() {
                 <ul></ul>
             </li>
             `
-    )
+        )
         .join("");
+    }
 }
 
 input.addEventListener("input", (e) => {
