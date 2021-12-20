@@ -2,11 +2,13 @@
 const result = document.getElementById("result");
 // Pointer le form
 const form = document.querySelector('form');
+// Récupérer ce qui est entrer dans l'input du form en poitant celui-ci
+const input = document.querySelector("input");
 let meals = [];
 
 // Se connecter à l'API et afficher les recettes
-async function fetchMeals() {
-    await fetch("https://www.themealdb.com/api/json/v1/1/search.php?s=chicken")
+async function fetchMeals(search) {
+     await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${search}`)
         .then((res) => res.json())
         .then((data) => (meals = data.meals));
     
@@ -31,9 +33,14 @@ function mealsDisplay() {
         .join("");
 }
 
+input.addEventListener("input", (e) => {
+    //fetchMeals(e.target.value).then(() => mealsDisplay()); //(va permettre d'afficher en temps réel quand user tape champ recherche)
+    fetchMeals(e.target.value);
+});
+
 form.addEventListener("submit", (e) => {
     e.preventDefault();
-    fetchMeals().then(() => mealsDisplay());
+    mealsDisplay();
 });
 
 
