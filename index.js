@@ -16,36 +16,42 @@ async function fetchMeals(search) {
 }
 
 function mealsDisplay() {
-    if (meals === null) {
-        result.innerHTML = "<h2>Aucun résulat</h2>";
-    } else {
-      // Je ne veux afficher que 12 plats max
-      meals.length = 12;
+  if (meals === null) {
+    result.innerHTML = "<h2>Aucun résultat</h2>";
+  } else {
+    meals.length = 12;
 
-      result.innerHTML = meals
-        .map(
-          (meal) =>
-            `
+    result.innerHTML = meals
+      .map((meal) => {
+        let ingredients = [];
+
+        for (i = 1; i < 21; i++) {
+          if (meal[`strIngredient${i}`]) {
+            let ingredient = meal[`strIngredient${i}`];
+            let measure = meal[`strMeasure${i}`];
+
+            ingredients.push(`<li>${ingredient} - ${measure}</li>`);
+          }
+        }
+
+        return `
             <li class="card">
-                <h2>${meal.strMeal}</h2>
-                <p>${meal.strArea}</p>
-                <img src=${meal.strMealThumb} alt="photo ${meal.strMeal}">
-                <ul></ul>
+              <h2>${meal.strMeal}</h2>
+              <p>${meal.strArea}</p>
+              <img src=${meal.strMealThumb} alt="photo ${meal.strMeal}">
+              <ul>${ingredients.join("")}</ul>
             </li>
-            `
-        )
-        .join("");
-    }
+            `;
+      })
+      .join("");
+  }
 }
 
 input.addEventListener("input", (e) => {
-    //fetchMeals(e.target.value).then(() => mealsDisplay()); //(va permettre d'afficher en temps réel quand user tape champ recherche)
-    fetchMeals(e.target.value);
+  fetchMeals(e.target.value);
 });
 
 form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    mealsDisplay();
+  e.preventDefault();
+  mealsDisplay();
 });
-
-
